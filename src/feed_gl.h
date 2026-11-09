@@ -29,7 +29,7 @@
 // hence every size the import needs is passed in explicitly).
 
 #pragma once
-#include <gl/GL.h>
+#include <GL/gl.h>
 #include <cstdint>
 #include <cstring>
 #include <cstdlib>

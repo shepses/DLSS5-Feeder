@@ -363,7 +363,7 @@ static bool FeedVkHookInstall()
         Log("[feed] vkCreateDevice hook: vulkan-1.dll is not loaded in this process (?)");
         return false;
     }
-    void *target = GetProcAddress(lib, "vkCreateDevice");
+    void *target = reinterpret_cast<void *>(GetProcAddress(lib, "vkCreateDevice"));
     if (target == nullptr)
     {
         Log("[feed] vkCreateDevice hook: vulkan-1.dll exports no vkCreateDevice (?)");
@@ -393,7 +393,7 @@ static bool FeedVkHookInstall()
 
     // vkQueuePresentKHR: counting only, and strictly optional -- a game that cannot
     // be hooked here still feeds fine, it just gets no pacer detection.
-    if (void *ptarget = GetProcAddress(lib, "vkQueuePresentKHR"))
+    if (void *ptarget = reinterpret_cast<void *>(GetProcAddress(lib, "vkQueuePresentKHR")))
     {
         MH_STATUS ps = MH_CreateHook(ptarget, reinterpret_cast<void *>(&FeedVkHookQueuePresent),
                                      reinterpret_cast<void **>(&g_vk_present_orig));

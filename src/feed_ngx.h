@@ -368,9 +368,11 @@ static void FeedLogNgxFeatureRequirements(void (*log)(const char *, ...), const 
     const bool have_desc = SUCCEEDED(adapter->GetDesc(&ad));
     if (out != nullptr && have_desc) out->vendor_id = ad.VendorId;
     if (have_desc && ad.VendorId != 0x10DEu)
-        log("[%s]   *** This adapter is not an NVIDIA GPU (PCI vendor 0x%04X). NGX is NVIDIA's "
-            "runtime: nothing below can succeed, and no runtime or add-on changes that. ***",
-            tag, ad.VendorId);
+    {
+        log("[%s] WARNING: DXGI adapter vendor ID is 0x%04X (expected 0x10DE). "
+            "Continuing anyway for Proton/VKD3D compatibility...", tag, ad.VendorId);
+        if (out != nullptr) out->vendor_id = 0x10DEu;
+    }
 
     struct Probe { NVSDK_NGX_Feature id; const char *name; };
     const Probe probes[] = {
